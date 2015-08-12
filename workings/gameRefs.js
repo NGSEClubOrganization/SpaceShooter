@@ -368,6 +368,7 @@ function spawnHealthUp() {
 		if(healthUp) {
 			healthUp.reset(Math.random() * game.width, -50);
 			healthUp.body.velocity.y = powerUpV;
+			healthUp.body.angularVelocity = 100;
 			powerUpTime = game.time.now + 50;
 		}
 	}
