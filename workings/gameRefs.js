@@ -70,6 +70,8 @@ var cursors;
 
 var paused = false;
 
+var pad1;
+
 function preloadStuff() {
 	// key : location
 	game.load.image('player',				'workings/assets/player.png');
@@ -99,6 +101,11 @@ function preloadStuff() {
 }
 
 function creatTheGame() {
+
+	// start gamepad
+    game.input.gamepad.start();
+
+    pad1 = game.input.gamepad.pad1;
 
 	// game.stage.backgroundColor = "11FFFF";
 	background = game.add.tileSprite(0, 0, game.width, game.height, 'background');
@@ -257,29 +264,46 @@ function updateEverything() {
 		score += Math.round(game.time.now/100);
 
 		// player move
-		if(cursors.left.isDown) {
-			player.body.velocity.x += -playerSpeed;
-			background.tilePosition.x += 1;
-		} else if(cursors.right.isDown) {
-			player.body.velocity.x += playerSpeed;
-			background.tilePosition.x -= 1;
+		// if(cursors.left.isDown) {
+		// 	player.body.velocity.x += -playerSpeed;
+		// 	background.tilePosition.x += 1;
+		// } else if(cursors.right.isDown) {
+		// 	player.body.velocity.x += playerSpeed;
+		// 	background.tilePosition.x -= 1;
+		// }
+		// if(cursors.up.isDown) {
+		// 	player.body.velocity.y += -playerSpeed;
+		// 	background.tilePosition.y += 1;
+		// } else if(cursors.down.isDown) {
+		// 	player.body.velocity.y += playerSpeed;
+		// 	background.tilePosition.y -= 1;
+		// }
+
+		// pad move
+		if(Math.abs(pad1.axis(0)) > 0) {
+			player.body.velocity.x += pad1.axis(0)*playerSpeed;
+			background.tilePosition.x += pad1.axis(0);
 		}
-		if(cursors.up.isDown) {
-			player.body.velocity.y += -playerSpeed;
-			background.tilePosition.y += 1;
-		} else if(cursors.down.isDown) {
-			player.body.velocity.y += playerSpeed;
-			background.tilePosition.y -= 1;
+		if(Math.abs(pad1.axis(1)) > 0) {
+			player.body.velocity.y += pad1.axis(1)*playerSpeed;
+			background.tilePosition.y += pad1.axis(1);
 		}
+	
 
 		engineParticles();
 
 		background.tilePosition.y += 3;
 
 		// bullet shoot
-		 if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
+		//  if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
+		//  	fireBullet();
+		// }
+
+		// bullet shoot
+		 if (pad1.getButton(11).isDown == 1) {
 		 	fireBullet();
-		 }	
+		}
+		// console.log(pad1.getButton(11));
 
 		// spawn enemy
 		spawnEnemies();
